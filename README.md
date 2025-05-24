@@ -4,7 +4,7 @@ Um gerador de senhas seguro, customizável e com duas versões:
 - ✅ **Versão Desktop (Python + Tkinter + ttkbootstrap)**
 - ✅ **Versão Web (HTML + CSS + JavaScript)**
 
-## 🚀 Funcionalidades
+## ⚙️ Funcionalidades
 
 - 🔐 Geração de senhas fortes e seguras
 - 🖥️ Interface gráfica para desktop (Python)
