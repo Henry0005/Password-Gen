@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerador de Senhas</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    :root {
+      --bg-color: #121212;
+      --text-color: #f5f5f5;
+      --box-color: #1e1e1e;
+      --primary-color: #00ffff;
+      --secondary-color: #00ff88;
+      --input-bg: #333;
+    }
+
+    body.light {
+      --bg-color: #e0e0e0;
+      --text-color: #121212;
+      --box-color: #ffffff;
+      --primary-color: #0077ff;
+      --secondary-color: #00bb66;
+      --input-bg: #cccccc;
+    }
+
+    body.neon {
+      --bg-color: #000;
+      --text-color: #0ff;
+      --box-color: #000;
+      --primary-color: #0ff;
+      --secondary-color: #00ff88;
+      --input-bg: #111;
+    }
+
+    body.synthwave {
+      --bg-color: #1a0028;
+      --text-color: #ff00ff;
+      --box-color: #2a003d;
+      --primary-color: #ff00ff;
+      --secondary-color: #00bbff;
+      --input-bg: #300046;
+    }
+
+    * {
+      box-sizing: border-box;
+      transition: background-color 0.4s, color 0.4s;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: var(--box-color);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px var(--primary-color);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .link-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: var(--box-color);
+      border: 1px solid var(--primary-color);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--text-color);
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+
+    .link-button:hover {
+      transform: scale(1.1);
+    }
+
+    .theme-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: var(--box-color);
+      border: 1px solid var(--primary-color);
+      padding: 6px;
+      border-radius: 50%;
+      cursor: pointer;
+      color: var(--text-color);
+      transition: transform 0.2s;
+    }
+
+    .theme-button svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--text-color);
+    }
+
+    .theme-button:hover {
+      transform: rotate(20deg) scale(1.2);
+    }
+
+    .theme-menu {
+      position: fixed;
+      top: 60px;
+      right: 20px;
+      background-color: var(--box-color);
+      border: 1px solid var(--primary-color);
+      border-radius: 10px;
+      padding: 8px;
+      display: none;
+      z-index: 999;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .theme-menu.show {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .theme-menu div {
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+
+    .theme-menu div:hover {
+      background-color: var(--primary-color);
+      color: var(--bg-color);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: var(--primary-color);
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+
+    .range-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    input[type="range"] {
+      width: 60%;
+    }
+
+    input[type="number"] {
+      width: 60px;
+      padding: 5px;
+      border-radius: 5px;
+      border: none;
+      text-align: center;
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      appearance: textfield;
+      -moz-appearance: textfield;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .checkbox-group label {
+      font-size: 14px;
+    }
+
+    .password-output {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      background-color: var(--input-bg);
+      color: var(--primary-color);
+      font-family: monospace;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    .btn {
+      background-color: var(--primary-color);
+      color: var(--bg-color);
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      margin: 5px;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #00cccc;
+      transform: scale(1.05);
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary-color);
+    }
+
+    .btn-secondary:hover {
+      background-color: #00cc66;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: var(--primary-color);
+      color: var(--bg-color);
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      z-index: 100;
+    }
+
+    .toast.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <a href="https://www.oberlin.edu/cit/bulletins/passwords-matter" target="_blank" class="link-button">
+    Por que usar senhas fortes?
+  </a>
+
+  <button class="theme-button" onclick="toggleMenu()">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+      <path d="M8 0a8 8 0 0 0-8 8c0 4.418 5.373 8 8 8a4.5 4.5 0 0 0 4.5-4.5c0-.828-.336-1.579-.879-2.121A3.001 3.001 0 0 0 11 7a3 3 0 1 0-2.996-3.163A8.053 8.053 0 0 0 8 0z"/>
+    </svg>
+  </button>
+
+  <div class="theme-menu" id="themeMenu">
+    <div onclick="trocarTema('')">Dark (Padrão)</div>
+    <div onclick="trocarTema('light')">Light</div>
+    <div onclick="trocarTema('neon')">Neon</div>
+    <div onclick="trocarTema('synthwave')">Dark Synthwave</div>
+  </div>
+
+  <div id="toast" class="toast">Senha copiada com sucesso! 🎉</div>
+
+  <div class="container">
+    <h1>Gerador de Senhas</h1>
+
+    <label for="length">Tamanho da senha</label>
+    <div class="range-container">
+      <input type="range" id="length" min="4" max="50" value="12" oninput="syncNumber(this.value)">
+      <input type="number" id="lengthNumber" min="4" max="50" value="12" oninput="syncRange(this.value)">
+    </div>
+
+    <div class="checkbox-group">
+      <label><input type="checkbox" id="uppercase" checked> Incluir letras maiúsculas</label>
+      <label><input type="checkbox" id="numbers" checked> Incluir números</label>
+      <label><input type="checkbox" id="symbols" checked> Incluir símbolos</label>
+    </div>
+
+    <button class="btn" onclick="gerarSenha()">Gerar Senha</button>
+    <button class="btn btn-secondary" onclick="copiarSenha()">Copiar</button>
+
+    <input type="text" id="output" class="password-output" readonly placeholder="Sua senha aparecerá aqui">
+  </div>
+
+  <script>
+    // ---------- Gerador ----------
+    function gerarSenha() {
+      const length = document.getElementById('length').value;
+      const usarMaiusculas = document.getElementById('uppercase').checked;
+      const usarNumeros = document.getElementById('numbers').checked;
+      const usarSimbolos = document.getElementById('symbols').checked;
+
+      let caracteres = 'abcdefghijklmnopqrstuvwxyz';
+      if (usarMaiusculas) caracteres += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      if (usarNumeros) caracteres += '0123456789';
+      if (usarSimbolos) caracteres += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+      if (caracteres.length === 0) {
+        mostrarToast('Selecione pelo menos uma opção! ⚠️');
+        return;
+      }
+
+      let senha = '';
+      for (let i = 0; i < length; i++) {
+        const rand = Math.floor(Math.random() * caracteres.length);
+        senha += caracteres[rand];
+      }
+
+      document.getElementById('output').value = senha;
+    }
+
+    function copiarSenha() {
+      const output = document.getElementById('output');
+      if (output.value === '') {
+        mostrarToast('Nenhuma senha para copiar! ⚠️');
+        return;
+      }
+      output.select();
+      output.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(output.value)
+        .then(() => mostrarToast('Senha copiada com sucesso! 🎉'))
+        .catch(err => mostrarToast('Erro ao copiar: ' + err));
+    }
+
+    function mostrarToast(mensagem) {
+      const toast = document.getElementById('toast');
+      toast.textContent = mensagem;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // ---------- Tema ----------
+    function trocarTema(tema) {
+      const temas = ['light', 'neon', 'synthwave'];
+      document.body.classList.remove(...temas);
+      if (tema) {
+        document.body.classList.add(tema);
+      }
+      localStorage.setItem('temaSelecionado', tema);
+      fecharMenu();
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById('themeMenu');
+      menu.classList.toggle('show');
+    }
+
+    function fecharMenu() {
+      document.getElementById('themeMenu').classList.remove('show');
+    }
+
+    document.addEventListener('click', function(event) {
+      const menu = document.getElementById('themeMenu');
+      const button = document.querySelector('.theme-button');
+      if (!menu.contains(event.target) && !button.contains(event.target)) {
+        fecharMenu();
+      }
+    });
+
+    window.onload = () => {
+      const temaSalvo = localStorage.getItem('temaSelecionado');
+      if (temaSalvo) {
+        trocarTema(temaSalvo);
+      }
+    }
+
+    // ---------- Sync Range/Number ----------
+    function syncNumber(val) {
+      document.getElementById('lengthNumber').value = val;
+    }
+
+    function syncRange(val) {
+      const v = Math.max(4, Math.min(50, val));
+      document.getElementById('length').value = v;
+    }
+  </script>
+</body>
+</html>
