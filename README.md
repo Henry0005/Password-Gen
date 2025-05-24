@@ -1,4 +1,4 @@
-# 🔐 Password-Gen
+# 🔒 Password-Gen
 
 Um gerador de senhas seguro, customizável e com duas versões:
 - ✅ **Versão Desktop (Python + Tkinter + ttkbootstrap)**
