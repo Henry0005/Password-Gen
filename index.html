@@ -188,10 +188,6 @@
       margin-bottom: 20px;
     }
 
-    .checkbox-group label {
-      font-size: 14px;
-    }
-
     .password-output {
       width: 100%;
       padding: 10px;
@@ -216,17 +212,12 @@
       transition: background-color 0.3s, transform 0.2s;
     }
 
-    .btn:hover {
-      background-color: #00cccc;
-      transform: scale(1.05);
-    }
-
     .btn-secondary {
       background-color: var(--secondary-color);
     }
 
-    .btn-secondary:hover {
-      background-color: #00cc66;
+    .btn:hover {
+      transform: scale(1.05);
     }
 
     .toast {
@@ -295,96 +286,105 @@
   </div>
 
   <script>
-    // ---------- Gerador ----------
+
+    // ===========================
+    // GERADOR CRIPTOGRAFICAMENTE SEGURO
+    // ===========================
     function gerarSenha() {
-      const length = document.getElementById('length').value;
-      const usarMaiusculas = document.getElementById('uppercase').checked;
-      const usarNumeros = document.getElementById('numbers').checked;
-      const usarSimbolos = document.getElementById('symbols').checked;
+      const length = parseInt(document.getElementById("length").value);
+      const usarMaiusculas = document.getElementById("uppercase").checked;
+      const usarNumeros = document.getElementById("numbers").checked;
+      const usarSimbolos = document.getElementById("symbols").checked;
 
-      let caracteres = 'abcdefghijklmnopqrstuvwxyz';
-      if (usarMaiusculas) caracteres += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      if (usarNumeros) caracteres += '0123456789';
-      if (usarSimbolos) caracteres += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+      let caracteres = "abcdefghijklmnopqrstuvwxyz";
+      if (usarMaiusculas) caracteres += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      if (usarNumeros) caracteres += "0123456789";
+      if (usarSimbolos) caracteres += "!@#$%^&*()_+-=[]{}|;:,.<>?";
 
-      if (caracteres.length === 0) {
-        mostrarToast('Selecione pelo menos uma opção! ⚠️');
+      if (!caracteres.length) {
+        mostrarToast("Selecione pelo menos uma opção! ⚠️");
         return;
       }
 
-      let senha = '';
+      const array = new Uint32Array(length);
+      crypto.getRandomValues(array);
+
+      let senha = "";
       for (let i = 0; i < length; i++) {
-        const rand = Math.floor(Math.random() * caracteres.length);
-        senha += caracteres[rand];
+        senha += caracteres[array[i] % caracteres.length];
       }
 
-      document.getElementById('output').value = senha;
+      document.getElementById("output").value = senha;
     }
 
+    // ===========================
+    // COPIAR SENHA
+    // ===========================
     function copiarSenha() {
-      const output = document.getElementById('output');
-      if (output.value === '') {
-        mostrarToast('Nenhuma senha para copiar! ⚠️');
+      const output = document.getElementById("output");
+      if (!output.value) {
+        mostrarToast("Nenhuma senha para copiar! ⚠️");
         return;
       }
-      output.select();
-      output.setSelectionRange(0, 99999);
       navigator.clipboard.writeText(output.value)
-        .then(() => mostrarToast('Senha copiada com sucesso! 🎉'))
-        .catch(err => mostrarToast('Erro ao copiar: ' + err));
+        .then(() => mostrarToast("Senha copiada com sucesso! 🎉"))
+        .catch(() => mostrarToast("Erro ao copiar!"));
     }
 
-    function mostrarToast(mensagem) {
-      const toast = document.getElementById('toast');
-      toast.textContent = mensagem;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 3000);
+    // ===========================
+    // TOAST
+    // ===========================
+    function mostrarToast(msg) {
+      const toast = document.getElementById("toast");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3000);
     }
 
-    // ---------- Tema ----------
+    // ===========================
+    // TEMA
+    // ===========================
     function trocarTema(tema) {
-      const temas = ['light', 'neon', 'synthwave'];
+      const temas = ["light", "neon", "synthwave"];
       document.body.classList.remove(...temas);
-      if (tema) {
-        document.body.classList.add(tema);
-      }
-      localStorage.setItem('temaSelecionado', tema);
-      fecharMenu();
+      if (tema) document.body.classList.add(tema);
+      localStorage.setItem("temaSelecionado", tema);
+      document.getElementById("themeMenu").classList.remove("show");
     }
 
     function toggleMenu() {
-      const menu = document.getElementById('themeMenu');
-      menu.classList.toggle('show');
+      document.getElementById("themeMenu").classList.toggle("show");
     }
 
     function fecharMenu() {
-      document.getElementById('themeMenu').classList.remove('show');
+      document.getElementById("themeMenu").classList.remove("show");
     }
 
-    document.addEventListener('click', function(event) {
-      const menu = document.getElementById('themeMenu');
-      const button = document.querySelector('.theme-button');
-      if (!menu.contains(event.target) && !button.contains(event.target)) {
+    document.addEventListener("click", function (event) {
+      const menu = document.getElementById("themeMenu");
+      const btn = document.querySelector(".theme-button");
+      if (!menu.contains(event.target) && !btn.contains(event.target)) {
         fecharMenu();
       }
     });
 
     window.onload = () => {
-      const temaSalvo = localStorage.getItem('temaSelecionado');
-      if (temaSalvo) {
-        trocarTema(temaSalvo);
-      }
+      const tema = localStorage.getItem("temaSelecionado");
+      if (tema) trocarTema(tema);
+    };
+
+    // ===========================
+    // SYNC
+    // ===========================
+    function syncNumber(v) {
+      document.getElementById("lengthNumber").value = v;
     }
 
-    // ---------- Sync Range/Number ----------
-    function syncNumber(val) {
-      document.getElementById('lengthNumber').value = val;
+    function syncRange(v) {
+      const val = Math.max(4, Math.min(50, v));
+      document.getElementById("length").value = val;
     }
 
-    function syncRange(val) {
-      const v = Math.max(4, Math.min(50, val));
-      document.getElementById('length').value = v;
-    }
   </script>
 </body>
 </html>
