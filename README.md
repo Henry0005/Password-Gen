@@ -25,7 +25,7 @@ Um gerador de senhas seguro, customizável e com duas versões:
 1. Clone o repositório:
 
 ```bash
-git clone https://github.com/Henry0005/Password-Gen.git
+git clone https://github.com/0xHenrySec/Password-Gen.git
 cd Password-Gen
 ```
 
@@ -43,7 +43,7 @@ python PasswordGenerator.py
 
 ## 🌐 Acesso à versão Web
 
-👉 [Acesse via GitHub Pages](https://henry0005.github.io/Password-Gen/)  
+👉 [Acesse via GitHub Pages](https://0xhenrysec.github.io/Password-Gen/)  
 Ou abra o arquivo `index.html` diretamente no navegador.
 
 ## 📂 Estrutura do Projeto
@@ -59,6 +59,7 @@ Password-Gen/
 ## 📜 Licença
 
 Este projeto está licenciado sob a licença MIT.  
-Consulte o arquivo [LICENSE](https://github.com/Henry0005/Password-Gen/blob/main/LICENSE) para mais detalhes.
+Consulte o arquivo [LICENSE](https://github.com/0xHenrySec/Password-Gen#MIT-1-ov-file) para mais detalhes.
 
 **> ⭐ Se este projeto foi útil, deixe uma estrela!**
+
